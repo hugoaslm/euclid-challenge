@@ -4,6 +4,8 @@ A machine learning challenge on galaxy evolution: predict the probability that a
 
 ![Euclid Perseus Cluster](assets/euclid_perseus_cluster.jpg)
 
+*Figure 1. Euclid view of the Perseus Cluster, illustrating the kind of wide-field extragalactic observations that motivate this challenge.*
+
 ## Challenge Summary
 
 - Task: binary probabilistic classification (`p_quenched` in `[0,1]`)
