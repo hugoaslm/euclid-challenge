@@ -1,4 +1,4 @@
-# Stellar Drift: The Euclid Quenching Challenge
+# Dying galaxies : Predicting Star Formation Shutdown with Euclid
 
 A machine learning challenge on galaxy evolution: predict the probability that a galaxy is **quenched** (not actively forming stars) from Euclid-style survey observables under class imbalance and redshift shift.
 

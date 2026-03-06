@@ -1,6 +1,6 @@
 <div style="display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px;">
   <div style="flex:1;min-width:280px;">
-    <h1 style="margin:0;">Euclid QuenchBench (Q1)</h1>
+    <h1 style="margin:0;">Dying galaxies challenge</h1>
     <p style="margin:6px 0 0 0;font-size:1.05em;line-height:1.35;">
       A probabilistic ML challenge on <b>galaxy quenching</b> using <b>Euclid Q1-style</b> observables:
       <b>photometry</b> + <b>morphology</b>.
@@ -51,6 +51,16 @@
 Galaxies in our Universe fundamentally fall into two categories: actively forming stars (the "Blue Cloud") or passively aging (the "Red Sequence" or **Quenched** galaxies). Understanding how, when, and why massive galaxies stop forming stars—a process known as *quenching*—is one of the most critical questions in modern cosmology. 
 
 The ESA **Euclid Space Telescope** is currently mapping the dark universe, looking back in time to observe galaxies across different cosmic epochs. However, identifying quenched galaxies at high redshift is exceptionally difficult because they emit very little UV/blue light so robust classification from survey observables is challenging.
+
+Traditionally, astronomers determine if a galaxy is quenched by estimating its underlying physical properties (like Stellar Mass and Star Formation Rate) using SED (Spectral Energy Distribution) fitting.
+
+**What is SED fitting?**
+
+It is a technique where the observed photometric fluxes of a galaxy across different wavelength bands are compared against a vast grid of theoretical, synthetic galaxy spectra. By finding the best-matching template, astronomers can infer the galaxy's physical properties.
+
+**Why consider Machine Learning (ML) for this?**
+
+SED fitting is notoriously slow and computationally expensive. With Euclid expected to observe billions of galaxies, running full SED fitting for every single object is a massive bottleneck. However, once trained, an ML model can predict the status of millions of galaxies in seconds. Moreover, standard SED fitting relies almost entirely on photometry (fluxes), while ML algorithms can effortlessly ingest diverse types of data, allowing us to combine photometric colors with structural and morphological features to create much more robust predictive models. Also, SED fitting requires assuming specific Initial Mass Functions (IMFs), Star Formation Histories (SFHs), and dust attenuation laws. ML models can learn complex, non-linear empirical relationships directly from the data distribution.
 
 ---
 

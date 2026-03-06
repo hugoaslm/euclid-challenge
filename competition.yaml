@@ -1,5 +1,5 @@
 version: 2
-title: "Stellar Drift: The Euclid Quenching Challenge"
+title: "Dying galaxies : Predicting Star Formation Shutdown with Euclid"
 description: "A Master 2 Astrophysics & Machine Learning challenge. Predict the probability of massive galaxies being 'Quenched' across cosmic time, overcoming severe class imbalance and redshift-induced domain shift."
 image: logo.png
 registration_auto_approve: False
