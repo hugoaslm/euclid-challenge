@@ -1,7 +1,9 @@
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.impute import SimpleImputer
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.pipeline import Pipeline
 
 
-# The submission here should simply be a function that returns a model
-# compatible with scikit-learn API
 def get_model():
-    return RandomForestClassifier()
+    return Pipeline([
+        ("gradboost_sk", HistGradientBoostingClassifier(max_iter=200, class_weight="balanced", random_state=0)),
+    ])

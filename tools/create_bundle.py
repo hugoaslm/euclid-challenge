@@ -8,6 +8,7 @@ PAGES_DIR = ROOT_DIR / "pages"
 INGESTION_DIR = ROOT_DIR / "ingestion_program"
 SCORING_DIR = ROOT_DIR / "scoring_program"
 PHASE_DATA = ROOT_DIR / "dev_phase"
+FINAL_PHASE_DATA = ROOT_DIR / "final_phase"
 
 BUNDLE_FILES = [
     ROOT_DIR / "competition.yaml",
@@ -22,7 +23,7 @@ if __name__ == "__main__":
             f = f.relative_to(ROOT_DIR)
             print(f)
             bundle.write(f)
-        for dirpath in [INGESTION_DIR, SCORING_DIR, PAGES_DIR, PHASE_DATA]:
+        for dirpath in [INGESTION_DIR, SCORING_DIR, PAGES_DIR, PHASE_DATA, FINAL_PHASE_DATA]:
             assert dirpath.exists(), (
                 f"{dirpath} does not exist while it should. Make sure you "
                 "followed all the instructions in the README before "

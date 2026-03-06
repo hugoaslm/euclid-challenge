@@ -1,60 +1,76 @@
 version: 2
-title: Templat competition - Dummy classification
-description: Dummy classification task
+title: "Stellar Drift: The Euclid Quenching Challenge"
+description: "A Master 2 Astrophysics & Machine Learning challenge. Predict the probability of massive galaxies being 'Quenched' across cosmic time, overcoming severe class imbalance and redshift-induced domain shift."
 image: logo.png
-registration_auto_approve: False  # if True, do not require approval from admin to join the comp
+registration_auto_approve: False
 
 terms: pages/terms.md
 pages:
-  - title: Participation
-    file: pages/participate.md
-  - title: Seed
-    file: pages/seed.md
-  - title: Timeline
-    file: pages/timeline.md
+  - title: Overview & Context
+    file: pages/overview.md
+  - title: Data & Physics
+    file: pages/data.md
+  - title: Evaluation Metrics
+    file: pages/evaluation.md
+  - title: Starting Kit & Baselines
+    file: pages/starting_kit.md
+  - title: Terms & Conditions
+    file: pages/terms.md
 
 tasks:
   - index: 0
     name: Developement Task
-    description: 'Tune models with training data, test against examples contained in public test data'
+    description: 'Evaluate models on the public test set (1.2 <= z < 1.5). Focus on handling imbalanced classes.'
     input_data: dev_phase/input_data/
     reference_data: dev_phase/reference_data/
+    ingestion_program: ingestion_program/
+    scoring_program: scoring_program/
+  - index: 1
+    name: Final ranking
+    description: 'Evaluate models on the private test set (1.5 <= z <= 2.5). Focus on Domain Adaptation at high redshift.'
+    input_data: final_phase/input_data/
+    reference_data: final_phase/reference_data/
     ingestion_program: ingestion_program/
     scoring_program: scoring_program/
 
 solutions:
   - index: 0
     tasks:
-    - 0
+      - 0
+      - 1
     path: solution/
 
-
 phases:
-  - name: Development Phase
-    description: 'Development phase: tune your models.'
-    start: 10-07-2025
-    end: 03-31-2026
+  - name: Development Phase (Public)
+    description: 'Submit your predictions on the public test set to climb the leaderboard. Fine-tune your probabilities!'
+    start: 01-01-2026
+    end: 02-08-2026
     tasks:
       - 0
+  - name: Final Phase (Private)
+    description: 'Final evaluation on the hidden private test set. The Domain Shift is maximal here. Who will survive the Redshift Drift?'
+    start: 02-09-2026
+    end: 03-08-2026
+    tasks:
+      - 1
 
 leaderboards:
-  - title: Results
+  - title: Main Leaderboard
     key: main
     columns:
-      - title: Test Accuracy
-        key: test
+      - title: Redshift-Macro Log Loss
+        key: logloss
         index: 0
         sorting: asc
-      - title: Private Test Accuracy
-        key: private_test
+      - title: AUPRC
+        key: auprc
         index: 1
-        sorting: asc
-        hidden: True
-      - title: Train time
-        key: train_time
+        sorting: desc
+      - title: Recall @ 80% Purity
+        key: recall80
         index: 2
         sorting: desc
-      - title: Test time
-        key: test_time
+      - title: Execution Time (s)
+        key: duration
         index: 3
-        sorting: desc
+        sorting: asc
