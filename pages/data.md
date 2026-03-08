@@ -14,25 +14,60 @@ You are given **observables** (what the telescope measures), not “intrinsic”
 
 ## 2) Feature groups
 
-<div style="border:1px solid #eee;border-radius:12px;padding:12px;background:#fafafa;">
-  <div style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono','Courier New', monospace;white-space:pre;overflow:auto;">
-┌─────────────────────────────────────────────────────────────────────┐
-│                         INPUT FEATURES (X)                           │
-├───────────────────────────────┬─────────────────────────────────────┤
-│ A) Euclid photometry          │ fluxes + flux errors in VIS/Y/J/H    │
-│                               │ measured with apertures (1FWHM,2FWHM)│
-├───────────────────────────────┼─────────────────────────────────────┤
-│ B) External optical photometry│ u/g/r/i/z (unified from LSST or DECam)│
-│                               │ often missing (NaNs)                 │
-├───────────────────────────────┼─────────────────────────────────────┤
-│ C) Morphology / shape         │ size, ellipticity, concentration,    │
-│                               │ Gini, asymmetry, smoothness, etc.    │
-├───────────────────────────────┼─────────────────────────────────────┤
-│ D) Foreground dust proxy      │ gal_ebv (Milky Way extinction)        │
-└───────────────────────────────┴─────────────────────────────────────┘
+<div style="overflow-x:auto; margin: 20px 0; border-radius: 12px; border: 1px solid #e1e4e8; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;">
+<table style="width:100%; border-collapse: collapse; background-color: white;">
+<thead>
+<tr style="background-color: #0b1020; color: white;">
+<th style="padding: 15px; text-align: left; border-bottom: 2px solid #2d333b; width: 30%;">Feature Group</th>
+<th style="padding: 15px; text-align: left; border-bottom: 2px solid #2d333b;">Description &amp; Specifics</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom: 1px solid #eee;">
+<td style="padding: 15px; vertical-align: top;"><strong>A) Euclid Photometry</strong></td>
+<td style="padding: 15px; line-height: 1.5;">
+Fluxes + flux errors in <strong>VIS, Y, J, H</strong> bands.
 
-TARGET (y): y_quenched ∈ {0,1}  (NOT included in features)
-  </div>
+
+<span style="font-size: 0.9em; color: #555;">Measured with various apertures (1FWHM, 2FWHM) to capture light distribution across the galaxy profile.</span>
+</td>
+</tr>
+<tr style="border-bottom: 1px solid #eee; background-color: #fcfcfc;">
+<td style="padding: 15px; vertical-align: top;"><strong>B) External Optical</strong></td>
+<td style="padding: 15px; line-height: 1.5;">
+<strong>u, g, r, i, z</strong> bands (unified from LSST or DECam).
+
+
+<span style="font-weight: bold; color: #d73a49;">Note:</span> High missingness (NaNs) is expected.
+</td>
+</tr>
+<tr style="border-bottom: 1px solid #eee;">
+<td style="padding: 15px; vertical-align: top;"><strong>C) Morphology &amp; Shape</strong></td>
+<td style="padding: 15px; line-height: 1.5;">
+Structural markers: <strong>Size, Ellipticity, and Concentration.</strong>
+
+
+<span style="font-size: 0.9em; color: #555;">Includes non-parametric indices such as Gini, Asymmetry, and Smoothness.</span>
+</td>
+</tr>
+<tr style="background-color: #fcfcfc;">
+<td style="padding: 15px; vertical-align: top;"><strong>D) Foreground Dust</strong></td>
+<td style="padding: 15px; line-height: 1.5;">
+<code>gal_ebv</code> (Milky Way extinction proxy).
+
+
+<span style="font-size: 0.9em; color: #555;">Used to correct for reddening caused by dust within our own galaxy along the line of sight.</span>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr style="background-color: #f6f8fa; border-top: 2px solid #e1e4e8;">
+<td colspan="2" style="padding: 12px 15px; font-size: 0.85em; color: #24292f; text-align: center;">
+<strong>Target (y):</strong> <code>y_quenched</code> (0: Star-forming, 1: Quenched). <em>Not included in input features.</em>
+</td>
+</tr>
+</tfoot>
+</table>
 </div>
 
 ---

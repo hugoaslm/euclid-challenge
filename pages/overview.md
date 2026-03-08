@@ -8,6 +8,10 @@
   </div>
 </div>
 
+<img src="https://raw.githubusercontent.com/hugoaslm/euclid-challenge/refs/heads/main/assets/euclid_perseus_cluster.jpg" 
+     alt="Perseus cluster" 
+     style="width: 100%; height: auto; border-radius: 8px;">
+
 <hr style="border:none;border-top:1px solid #eee;margin:16px 0;"/>
 
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;">
@@ -95,26 +99,6 @@ You must predict a probability:
 - `y_quenched = 1` (quenched)
 - `y_quenched = 0` (star-forming)
 - submission is **probabilistic**: `p_quenched = P(y_quenched=1)`
-
----
-
-## Labels: simple explanation + rigorous definition
-
-We define the target from the **specific star-formation rate**:
-
-$$
-\mathrm{sSFR} = \frac{\mathrm{SFR}}{M_*}
-$$
-
-A galaxy is labeled **quenched** if:
-
-$$
-\mathrm{sSFR} < \frac{0.3}{t_H(z)}
-\quad\text{with}\quad
-t_H(z) = \frac{1}{H(z)}.
-$$
-
-**Intuition:** the “quenching threshold” evolves with redshift because typical star formation activity is higher earlier in the Universe.
 
 ---
 
