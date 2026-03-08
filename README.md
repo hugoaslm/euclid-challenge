@@ -83,6 +83,15 @@ python tools/create_bundle.py
 
 Your submission must expose `get_model` in `solution/submission.py` and return a scikit-learn compatible estimator that can be fit and used for probabilistic prediction.
 
+## Team
+
+LEFEBVRE Quentin
+MORICE Clément
+BILLUART Jérémy
+DANA GARCIA Paola
+POUPONNEAU Thomas
+ANSELME Hugo
+
 ## Acknowledgement
 
 This project uses Euclid Q1 data products from the Euclid mission (European Space Agency, ESA).
