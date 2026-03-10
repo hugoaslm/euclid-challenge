@@ -5,5 +5,5 @@ from sklearn.pipeline import Pipeline
 
 def get_model():
     return Pipeline([
-        ("gradboost_sk", HistGradientBoostingClassifier(max_iter=200, class_weight="balanced", random_state=0)),
+        ("gradboost_sk", HistGradientBoostingClassifier(max_iter=200, random_state=0)),
     ])

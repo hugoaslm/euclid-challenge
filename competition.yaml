@@ -19,43 +19,44 @@ pages:
 
 tasks:
   - index: 0
-    name: Developement Task
-    description: 'Evaluate models on the public test set (1.2 <= z < 1.5). Focus on handling imbalanced classes.'
-    input_data: dev_phase/input_data/
-    reference_data: dev_phase/reference_data/
-    ingestion_program: ingestion_program/
-    scoring_program: scoring_program/
+    name: Development Task
+    description: "Evaluate models on the public test set (1.2 <= z < 1.5)."
+    input_data: dev_phase/input_data
+    reference_data: dev_phase/reference_data
+    ingestion_program: ingestion_program
+    scoring_program: scoring_program
+
   - index: 1
-    name: Final ranking
-    description: 'Evaluate models on the private test set (1.5 <= z <= 2.5). Focus on Domain Adaptation at high redshift.'
-    input_data: final_phase/input_data/
-    reference_data: final_phase/reference_data/
-    ingestion_program: ingestion_program/
-    scoring_program: scoring_program/
+    name: Final Task
+    description: "Evaluate models on the private test set (1.5 <= z <= 2.5)."
+    input_data: final_phase/input_data
+    reference_data: final_phase/reference_data
+    ingestion_program: ingestion_program
+    scoring_program: scoring_program
 
 solutions:
   - index: 0
-    tasks:
-      - 0
-      - 1
-    path: solution/
+    tasks: [0, 1]
+    path: solution
 
 phases:
-  - name: Development Phase (Public)
-    description: 'Submit your predictions on the public test set to climb the leaderboard. Fine-tune your probabilities!'
+  - index: 0
+    name: Development Phase (Public)
+    description: "Submit on the public test set."
     start: 01-01-2026
     end: 02-08-2026
-    tasks:
-      - 0
-  - name: Final Phase (Private)
-    description: 'Final evaluation on the hidden private test set. The Domain Shift is maximal here. Who will survive the Redshift Drift?'
+    tasks: [0]
+
+  - index: 1
+    name: Final Phase (Private)
+    description: "Final evaluation on the hidden private test set."
     start: 02-09-2026
     end: 03-08-2026
-    tasks:
-      - 1
+    tasks: [1]
 
 leaderboards:
-  - title: Main Leaderboard
+  - index: 0
+    title: Main Leaderboard
     key: main
     columns:
       - title: Redshift-Macro Log Loss
@@ -66,8 +67,8 @@ leaderboards:
         key: auprc
         index: 1
         sorting: desc
-      - title: Recall @ 80% Purity
-        key: recall80
+      - title: Recall @ 85% Purity
+        key: recall85
         index: 2
         sorting: desc
       - title: Execution Time (s)

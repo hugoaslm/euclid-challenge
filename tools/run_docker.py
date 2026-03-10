@@ -14,12 +14,12 @@ if __name__ == "__main__":
     print("Docker client initialized successfully.")
 
     print("Building Docker image...")
-    client.images.build(path=".", tag="tommoral/template:v1")
-    print("Docker image built successfully with tag 'tommoral/template:v1'.")
+    client.images.build(path=str(REPO), dockerfile="tools/Dockerfile", tag="hugo2/euclid-challenge:v1")
+    print("Docker image built successfully with tag 'hugo2/euclid-challenge:v1'.")
 
     print("Running Docker container...")
     logs = client.containers.run(
-        image="tommoral/template:v1",
+        image="hugo2/euclid-challenge:v1",
         command="python3 /app/ingestion_program/ingestion.py",
         remove=True,
         name="ingestion",
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     )
     print(logs.decode("utf-8"))
     logs = client.containers.run(
-        image="tommoral/template:v1",
+        image="hugo2/euclid-challenge:v1",
         command="python3 /app/scoring_program/scoring.py",
         remove=True,
         name="scoring",

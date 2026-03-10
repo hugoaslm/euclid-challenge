@@ -5,8 +5,6 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import average_precision_score
 
-EVAL_SETS = ["test", "private_test"]
-
 
 def _clip_proba(p):
     p = np.asarray(p, dtype=float)
@@ -14,7 +12,6 @@ def _clip_proba(p):
 
 
 def _balanced_weights(y):
-    """Balanced class weights computed on the current evaluation set."""
     y = y.astype(int)
     n = len(y)
     n1 = int(y.sum())
@@ -25,7 +22,6 @@ def _balanced_weights(y):
 
 
 def weighted_log_loss(y, p):
-    """Class-balanced weighted log loss on a single set."""
     y = np.asarray(y, dtype=int)
     p = _clip_proba(p)
     w = _balanced_weights(y)
@@ -33,12 +29,7 @@ def weighted_log_loss(y, p):
     return float(loss)
 
 
-def macro_redshift_weighted_log_loss(df, y_col = "y_quenched", p_col = "p_quenched", 
-                                     zbin_col = "z_bin"):
-    """
-    Compute class-balanced weighted log loss per redshift bin,
-    then average equally across bins (macro over bins).
-    """
+def macro_redshift_weighted_log_loss(df, y_col="y_quenched", p_col="p_quenched", zbin_col="z_bin"):
     bins = df[zbin_col].dropna().unique()
     if len(bins) == 0:
         raise ValueError("No redshift bins available for macro loss.")
@@ -49,7 +40,6 @@ def macro_redshift_weighted_log_loss(df, y_col = "y_quenched", p_col = "p_quench
         y = g[y_col].to_numpy(dtype=int)
         p = g[p_col].to_numpy(dtype=float)
 
-        # If only one class appears in a bin, fall back to unweighted log loss in that bin
         if y.min() == y.max():
             p = _clip_proba(p)
             ll = -(y * np.log(p) + (1 - y) * np.log(1 - p)).mean()
@@ -60,8 +50,7 @@ def macro_redshift_weighted_log_loss(df, y_col = "y_quenched", p_col = "p_quench
     return float(np.mean(per_bin_losses))
 
 
-def recall_at_precision(y, p, target_precision = 0.85):
-    """Recall (completeness) achieved at or above a target precision (purity)."""
+def recall_at_precision(y, p, target_precision=0.85):
     y = np.asarray(y, dtype=int)
     p = np.asarray(p, dtype=float)
 
@@ -81,11 +70,6 @@ def recall_at_precision(y, p, target_precision = 0.85):
 
 
 def _load_and_align(pred_path, ref_path):
-    """
-    Expect:
-      - predictions: object_id, p_quenched  (probability of quenched, class=1)
-      - reference:   object_id, y_quenched, z_bin
-    """
     pred = pd.read_csv(pred_path)
     ref = pd.read_csv(ref_path)
 
@@ -118,69 +102,40 @@ def _load_and_align(pred_path, ref_path):
 
 
 def main(reference_dir, prediction_dir, output_dir):
-    scores = {}
-    for eval_set in EVAL_SETS:
-        print(f'Scoring {eval_set}')
+    merged = _load_and_align(
+        prediction_dir / "predictions.csv",
+        reference_dir / "test_labels.csv",
+    )
 
-        merged = _load_and_align(
-            prediction_dir / f"{eval_set}_predictions.csv",
-            reference_dir / f"{eval_set}_labels.csv",
-        )
+    y = merged["y_quenched"].to_numpy(dtype=int)
+    p = merged["p_quenched"].to_numpy(dtype=float)
 
-        y = merged["y_quenched"].to_numpy(dtype=int)
-        p = merged["p_quenched"].to_numpy(dtype=float)
-
-        # Primary: macro redshift class-balanced weighted log loss
-        scores[f"{eval_set}_primary_wlogloss_macro_z"] = macro_redshift_weighted_log_loss(
+    scores = {
+        "logloss": macro_redshift_weighted_log_loss(
             merged, y_col="y_quenched", p_col="p_quenched", zbin_col="z_bin"
-        )
+        ),
+        "auprc": float(average_precision_score(y, p)),
+        "recall85": float(recall_at_precision(y, p, 0.85)),
+    }
 
-        # Secondary: AUPRC
-        scores[f"{eval_set}_secondary_auprc"] = float(average_precision_score(y, p))
+    metadata_path = prediction_dir / "metadata.json"
+    if metadata_path.exists():
+        durations = json.loads(metadata_path.read_text())
+        scores["duration"] = durations.get("duration", durations.get("train_time", -1))
+    else:
+        scores["duration"] = -1
 
-        # Tertiary: Recall at 85% precision
-        scores[f"{eval_set}_tertiary_recall_at_p85"] = float(recall_at_precision(y, p, 0.85))
-
-    # Add train and test times in the score
-    json_durations = (prediction_dir / 'metadata.json').read_text()
-    durations = json.loads(json_durations)
-    scores.update(**durations)
-    print(scores)
-
-    # Write output scores
     output_dir.mkdir(parents=True, exist_ok=True)
-    (output_dir / 'scores.json').write_text(json.dumps(scores))
+    (output_dir / "scores.json").write_text(json.dumps(scores))
 
 
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Scoring program for codabench"
-    )
-    parser.add_argument(
-        "--reference-dir",
-        type=str,
-        default="/app/input/ref",
-        help="",
-    )
-    parser.add_argument(
-        "--prediction-dir",
-        type=str,
-        default="/app/input/res",
-        help="",
-    )
-    parser.add_argument(
-        "--output-dir",
-        type=str,
-        default="/app/output",
-        help="",
-    )
+    parser = argparse.ArgumentParser(description="Scoring program for codabench")
+    parser.add_argument("--reference-dir", type=str, default="/app/input/ref")
+    parser.add_argument("--prediction-dir", type=str, default="/app/input/res")
+    parser.add_argument("--output-dir", type=str, default="/app/output")
 
     args = parser.parse_args()
-
-    main(
-        Path(args.reference_dir),
-        Path(args.prediction_dir),
-        Path(args.output_dir)
-    )
+    main(Path(args.reference_dir), Path(args.prediction_dir), Path(args.output_dir))
